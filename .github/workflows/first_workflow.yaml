@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Install Bandit
         run: pip install bandit
@@ -35,8 +35,10 @@ jobs:
 
       - name: Upload Bandit Report
         uses: actions/upload-artifact@v7.0.1
+        if: always()
         with:
-          name: bandit-report
+          name: bandit_report
+          path: bandit_report.json
   codeql:
     name: CodeQL SAST
     runs-on: ubuntu-latest
