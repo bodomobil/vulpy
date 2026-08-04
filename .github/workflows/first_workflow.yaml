@@ -79,10 +79,20 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
       -
-        name: Build and push
-        uses: docker/build-push-action@v7
+        name: Build docker image only # no push
+        run: docker build -f ./bad/Dockerfile -t imagetobescanned:latest ./bad
+
+      - name: Scan docker image with Docker Scout
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
-          push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/vulpyapp:latest
-          file: ./bad/Dockerfile
-          context: ./bad
+          image-ref: imagetobescanned:latest
+          format: sarif
+          output: trivy_report.sarif
+      # -
+      #   name: Build and push
+      #   uses: docker/build-push-action@v7
+      #   with:
+      #     push: true
+      #     tags: ${{ vars.DOCKERHUB_USERNAME }}/vulpyapp:latest
+      #     file: ./bad/Dockerfile
+      #     context: ./bad
