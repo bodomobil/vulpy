@@ -15,6 +15,28 @@ jobs:
         echo Add other actions to build,
         echo test, and deploy your project.
 
+  bandit:
+    name: Bandit SAST
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit
+        run: bandit -ll -ii -r . -f json -o bandit_report.json
+
+      - name: Upload Bandit Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit-report
   codeql:
     name: CodeQL SAST
     runs-on: ubuntu-latest
