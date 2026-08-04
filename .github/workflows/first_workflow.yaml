@@ -88,6 +88,13 @@ jobs:
           image-ref: imagetobescanned:latest
           format: sarif
           output: trivy_report.sarif
+          
+      - name: Upload Trivy report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy_report
+          path: trivy_report.sarif
       # -
       #   name: Build and push
       #   uses: docker/build-push-action@v7
